@@ -106,7 +106,7 @@ function violationCountStyle(
   };
 }
 
-export function ApmeViolationsCell({ entity }: { entity: Entity }) {
+export function ApmeViolationsCell({ entity }: Readonly<{ entity: Entity }>) {
   const theme = useTheme();
   const mode = theme.palette.type === 'dark' ? 'dark' : 'light';
   const colorTokens = useApmeColorTokens();
@@ -138,11 +138,9 @@ export function ApmeViolationsCell({ entity }: { entity: Entity }) {
 
   useEffect(() => {
     let cancelled = false;
-    if (!projectsFetchPromise) {
-      projectsFetchPromise = fetchProjectMap().catch(
-        () => new Map<string, Project>(),
-      );
-    }
+    projectsFetchPromise ??= fetchProjectMap().catch(
+      () => new Map<string, Project>(),
+    );
     void projectsFetchPromise.then(map => {
       if (!cancelled) {
         setProjectMap(map);
